@@ -1,0 +1,24 @@
+{% extends 'food/base.html' %}
+{% block body %}
+<br>
+<br>
+    <div class="row">
+        <div class="col-md-4 offset-md-2">
+            <img class="card" src="{{obj.image}}" height="200px" width="250px">
+        </div>
+        <div class="col-md-4">
+            <h3>{{obj.name}}</h3>
+            <h4>{{obj.desc}}</h4>
+            <h5>${{obj.price}}</h5>
+        </div>
+        <div class="col-md-2">
+            <a class="btn btn-success" href="{%url 'food:update' obj.id%}">Update</a>
+            <br>
+            <br>
+            <br>
+            <a class="btn btn-success" href="{%url 'food:delete' obj.id%}"> Delete</a>
+
+        </div>
+       
+    </div>
+{% endblock %}

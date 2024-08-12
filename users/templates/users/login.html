@@ -1,0 +1,14 @@
+{% extends 'food/base.html' %}
+{%block body%}
+<br>
+
+<form method="POST">
+    {%csrf_token%}
+    {{form}}
+    <button type="submit" >Login</button>
+</form>
+<br>
+<br>
+<h4>New User</h4>
+<a class="btn btn-sucess" href="{% url 'register' %}">Register Here</a>
+{% endblock %}

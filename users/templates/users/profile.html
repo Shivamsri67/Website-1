@@ -1,0 +1,12 @@
+{%extends 'food/base.html'%}
+{%block body%}
+Name : <h2>{{user.username}}</h2>
+Profile Picture :<img src="{{user.profile.image.url}}" height="200px" width="200px" >
+<br>
+<br>
+Location :<h4>{{user.profile.location}}</h4>
+
+<a class="btn btn-success" href="{% url 'updateprofile' %}">Update Profile</a>
+
+
+{%endblock%}

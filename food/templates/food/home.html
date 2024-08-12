@@ -1,0 +1,15 @@
+{% extends 'food/base.html' %}
+{% block body %}
+<h1> Welcome!</h1>
+<h3>Visit the section you want to explore</h3>
+<div class="row">
+    <div class="col-md-4 offset-md-2">
+        <a href="{% url 'food:index'%}"><img class="card" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSR1h2Isr2mzM8CqP3oPt7FMCqMY-Cq1CKK8w&s" height="300px" width="300px" </a>
+    </div>
+    <div class="col-md-3 offset-md-3">
+        <a href="{% url 'food:index' %}"><h4>Food Items</h4></a>
+
+    </div>
+    
+</div>
+{% endblock %}
