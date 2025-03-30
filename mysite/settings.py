@@ -1,3 +1,4 @@
+
 """
 Django settings for mysite project.
 
@@ -12,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import json
+import boto3
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -29,6 +32,45 @@ SECRET_KEY = 'django-insecure-14=^s46je@_akv0(sae&gu$+1bs=)yn@5sjf(6jv@=q@wx)bk*
 DEBUG = True
 
 ALLOWED_HOSTS = ["16.170.211.201","16.170.211.201:8000"]
+
+
+
+def get_secret(secret_name):
+    """Fetch database credentials from AWS Secrets Manager"""
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name='your-region'  # Change to your AWS region
+    )
+    
+    try:
+        get_secret_value_response = client.get_secret_value(SecretId=secret_name)
+        secret = get_secret_value_response['SecretString']
+        return json.loads(secret)
+    except Exception as e:
+        print(f"Error retrieving secret: {e}")
+        return None
+
+# Fetch secrets from AWS
+secret_name = "mysqldbc"
+secrets = get_secret(secret_name)
+
+if secrets:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': secrets.get('dbname', 'default_db'),
+            'USER': secrets.get('username', 'default_user'),
+            'PASSWORD': secrets.get('password', ''),
+            'HOST': secrets.get('host', 'localhost'),
+            'PORT': secrets.get('port', '3306'),
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+            },
+        }
+    }
+else:
+    raise Exception("Database credentials could not be retrieved from AWS Secrets Manager.")
 
 
 # Application definition
@@ -75,16 +117,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME':  BASE_DIR / 'db.sqlite3',
-    }
-}
 
 
 # Password validation
